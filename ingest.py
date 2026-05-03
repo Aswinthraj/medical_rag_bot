@@ -4,12 +4,12 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import os
 
-# ✅ Initialize a local embedding model (runs on GPU if available)
+# Initialize a local embedding model (runs on GPU if available)
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
 def ingest_pdf(pdf_path, vectordb=None):
     """Load a single PDF and store embeddings in vector DB"""
-    print(f"📄 Loading {pdf_path} ...")
+    print(f"Loading {pdf_path} ...")
     loader = PyPDFLoader(pdf_path)
     documents = loader.load()
     
@@ -31,18 +31,18 @@ def ingest_pdf(pdf_path, vectordb=None):
     else:
         vectordb.add_documents(docs)
     
-    print(f"✅ Ingested {pdf_path}")
+    print(f"Ingested {pdf_path}")
     return vectordb
 
 if __name__ == "__main__":
-    # ✅ Folder where all your PDFs are stored
+    # Folder where all your PDFs are stored
     data_folder = r"C:\Users\Femilin Aswinth Raj\medical_rag_bot\data"
 
     # Automatically detect all PDF files in the folder
     pdf_files = [os.path.join(data_folder, f) for f in os.listdir(data_folder) if f.endswith(".pdf")]
 
     if not pdf_files:
-        print("⚠️ No PDF files found in the data folder!")
+        print("No PDF files found in the data folder!")
     else:
         print(f"\n{'='*60}")
         print(f"Found {len(pdf_files)} PDF files to ingest")
@@ -56,5 +56,5 @@ if __name__ == "__main__":
         if vectordb:
             vectordb.persist()
             print(f"\n{'='*60}")
-            print("✅ ALL DOCUMENTS INGESTED SUCCESSFULLY!")
+            print("ALL DOCUMENTS INGESTED SUCCESSFULLY!")
             print(f"{'='*60}\n")

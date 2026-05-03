@@ -18,7 +18,7 @@ import torch
 # Increase timeout for model downloads
 os.environ['HF_HUB_DOWNLOAD_TIMEOUT'] = '300'
 
-# 🌐 Initialize FastAPI
+# Initialize FastAPI
 app = FastAPI(title="Offline Medical RAG Chatbot (Local Mode)")
 
 # Enable CORS for frontend
@@ -30,13 +30,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 🧩 1️⃣ Create Local Hugging Face Embeddings
+# Create Local Hugging Face Embeddings
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
-# 🗂️ 2️⃣ Load local vector database
+# Load local vector database
 vectordb = Chroma(persist_directory="./vectorstore", embedding_function=embeddings)
 
-# 🤖 3️⃣ Create a local LLM pipeline (Flan-T5)
+# Create a local LLM pipeline (Flan-T5)
 # Auto-detect GPU availability
 device = 0 if torch.cuda.is_available() else -1
 device_name = torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU"
@@ -60,7 +60,7 @@ generator = pipeline(
 )
 llm = HuggingFacePipeline(pipeline=generator)
 
-# 🧠 4️⃣ Define an optimized prompt for better medical responses
+# Define an optimized prompt for better medical responses
 PROMPT = PromptTemplate(
     input_variables=["context", "question"],
     template=(
@@ -76,12 +76,12 @@ PROMPT = PromptTemplate(
     )
 )
 
-# 🧾 5️⃣ Define the input model for the chatbot
+# Define the input model for the chatbot
 class Query(BaseModel):
     query: str
     top_k: int
 
-# 💬 6️⃣ POST endpoint for chatbot questions
+# POST endpoint for chatbot questions
 @app.post("/ask")
 def ask_medical_bot(request: Query):
     try:
@@ -114,7 +114,7 @@ def ask_medical_bot(request: Query):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# 🏠 7️⃣ Serve the frontend
+# Serve the frontend
 @app.get("/")
 def serve_frontend():
     return FileResponse("index.html")

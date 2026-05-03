@@ -4,7 +4,7 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import os
 
-print("🚀 Quick Medical Document Ingestion")
+print("Quick Medical Document Ingestion")
 print("=" * 60)
 
 # Initialize embeddings
@@ -28,7 +28,7 @@ for i, filename in enumerate(priority_files, 1):
     pdf_path = os.path.join(data_folder, filename)
     
     if not os.path.exists(pdf_path):
-        print(f"⚠️ Skipping {filename} - file not found")
+        print(f"Skipping {filename} - file not found")
         continue
     
     print(f"\n[{i}/{len(priority_files)}] Processing: {filename}")
@@ -37,7 +37,7 @@ for i, filename in enumerate(priority_files, 1):
         # Load PDF
         loader = PyPDFLoader(pdf_path)
         documents = loader.load()
-        print(f"   ✓ Loaded {len(documents)} pages")
+        print(f"   Loaded {len(documents)} pages")
         
         # Split into chunks
         text_splitter = RecursiveCharacterTextSplitter(
@@ -45,7 +45,7 @@ for i, filename in enumerate(priority_files, 1):
             chunk_overlap=200
         )
         docs = text_splitter.split_documents(documents)
-        print(f"   ✓ Created {len(docs)} chunks")
+        print(f"   Created {len(docs)} chunks")
         
         # Add to vectorstore
         if vectordb is None:
@@ -54,23 +54,23 @@ for i, filename in enumerate(priority_files, 1):
                 embedding=embeddings,
                 persist_directory="./vectorstore"
             )
-            print(f"   ✓ Created vectorstore")
+            print(f"   Created vectorstore")
         else:
             vectordb.add_documents(docs)
-            print(f"   ✓ Added to vectorstore")
+            print(f"   Added to vectorstore")
             
     except Exception as e:
-        print(f"   ❌ Error: {str(e)}")
+        print(f"   Error: {str(e)}")
         continue
 
 if vectordb:
     vectordb.persist()
     print("\n" + "=" * 60)
-    print("✅ QUICK INGESTION COMPLETE!")
+    print("QUICK INGESTION COMPLETE!")
     print("=" * 60)
     print("\nYou can now:")
     print("1. Start the server: .\\start_app.ps1")
     print("2. Ask medical questions")
     print("\nTo add more documents later, run: python ingest.py")
 else:
-    print("\n❌ No documents were ingested")
+    print("\nNo documents were ingested")
