@@ -20,7 +20,7 @@ An offline medical chatbot using Retrieval-Augmented Generation (RAG) with FastA
 
 1. Clone the repository:
 ```bash
-git clone <your-repo-url>
+git clone repo link
 cd medical_rag_bot
 ```
 
@@ -79,4 +79,5 @@ MIT
 
 ## Author
 
-[Your Name]
+Femilin Aswinth Raj P
+Hari Dharshini G
