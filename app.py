@@ -114,6 +114,9 @@ def ask_medical_bot(request: Query):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+# Mount static files directory for CSS, JS, etc.
+app.mount("/", StaticFiles(directory=".", html=True), name="static")
+
 # Serve the frontend
 @app.get("/")
 def serve_frontend():
@@ -123,3 +126,8 @@ def serve_frontend():
 @app.get("/api")
 def api_info():
     return {"message": "Welcome to the Offline Medical RAG Chatbot API (Local Mode)"}
+
+# Start the server
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
